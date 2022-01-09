@@ -1,0 +1,31 @@
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <script src="../src/jquery-3.6.0.min.js"></script>
+  <script src="../src/crypto/wasm_exec.js"></script>
+  <script src="../src/crypto/crypto.js"></script>
+
+</head>
+<body>
+  <script>
+    $(function() {
+      let crypto = new Crypto()
+      crypto.load().then(() => {
+        console.log("library loaded!")
+        let prvkey = crypto.prvkey()
+        let id = crypto.id(prvkey)
+        let hash = crypto.hash("test")
+        let sig = crypto.sign(hash, prvkey)
+        let rid = crypto.recoverid(hash, sig)
+
+        console.log("prvkey: " + prvkey)
+        console.log("id: " + id)
+        console.log("hash: " + hash)
+        console.log("sign: " + sig)
+        console.log("rid: " + rid)
+      }) 
+    });
+  </script>
+</body>
+</html>
