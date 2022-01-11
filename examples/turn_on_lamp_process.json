@@ -1,0 +1,15 @@
+{
+    "conditions": {
+        "colonyid": "2c3f333868f75991fec158823b115609107415c85ba21dc7ed35037573170358",
+        "runtimeids": ["901da7c2d0af419b5c86b009c560d99db6509d08e4a982e50833b20bb96c5507"],
+        "runtimetype": "lamp",
+        "mem": 1000,
+        "cores": 10,
+        "gpus": 1
+    },
+    "env": {
+        "lamp_state": "on"
+    },
+    "timeout": -1,
+    "maxretries": 3
+}

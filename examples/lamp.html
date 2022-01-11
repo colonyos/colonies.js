@@ -1,0 +1,39 @@
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <script src="../src/jquery-3.6.0.min.js"></script>
+  <script src="../src/crypto/wasm_exec.js"></script>
+  <script src="../src/crypto/crypto.js"></script>
+  <script src="../src/colonyruntime.js"></script>
+
+</head>
+<body>
+  <img id="lamp" src="./lamp_off.png">
+  <script>
+    $(function() {
+      let colonyid = "2c3f333868f75991fec158823b115609107415c85ba21dc7ed35037573170358"
+      let runtimeid = "901da7c2d0af419b5c86b009c560d99db6509d08e4a982e50833b20bb96c5507"
+      let runtime_prvkey = "525873b0cf5373c6e53a36abb6fe54ec5621689e73b4c1fb97206d802f5d18d9"
+      let runtime = new ColonyRuntime()
+
+      runtime.load()
+      .then(() => {
+        runtime.subscribe_processes("lamp", 0, runtime_prvkey, function(processes) {
+          runtime.assign(colonyid, runtime_prvkey).then((process, err) => {
+            lamp_state = process.attributes[0].value
+            if (lamp_state == "on") {
+              $("#lamp").attr("src","./lamp_on.png");
+            }
+            if (lamp_state == "off") {
+              $("#lamp").attr("src","./lamp_off.png");
+            }
+
+            runtime.close_process(process.processid, true, runtime_prvkey)
+          }) 
+        })
+      });
+    });
+  </script>
+</body>
+</html>

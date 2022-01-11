@@ -129,5 +129,33 @@ class ColonyRuntime {
     msg.msgtype = "closefailedfulmsg"
     return this.send_rpc_msg(msg, prvkey)
   }
+ 
+  subscribe_processes(runtimetype, state, prvkey, callback) {
+    var msg = {
+      "msgtype": "subscribeprocessesmsg",
+      "runtimetype": runtimetype,
+      "state": state,
+      "timeout": -1
+    }
+    
+    let rpcMsg = {
+      "payloadtype": msg.msgtype,
+      "payload": "",
+      "signature": ""
+    }
+    
+    rpcMsg.payload = btoa(JSON.stringify(msg))
+    rpcMsg.signature = this.crypto.sign(rpcMsg.payload, prvkey)
+
+    const socket = new WebSocket('wss://localhost:8080/pubsub');
+    socket.addEventListener('open', function (event) {
+      socket.send(JSON.stringify(rpcMsg));
+    });
+
+    socket.addEventListener('message', function (event) {
+      msg = JSON.parse(atob(JSON.parse(event.data).payload))
+      callback(msg)
+    });
+  }
 
 }

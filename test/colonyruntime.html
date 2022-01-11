@@ -58,7 +58,13 @@
           console.log("approving runtime with id " + runtimeid)
           return runtime.approve_runtime(new_runtime.runtimeid, colony_prvkey)
         }).then((err) => {
-          console.log("submitting process " + processid + " to colony" + colonyid)
+          console.log("subscribing to pending processes")
+          runtime.subscribe_processes("test_runtime_type", 0, runtime_prvkey).then((processes)=> {
+              console.log("got a pending processes notification")
+          }) 
+          return new Promise((res) => setTimeout(() => res("p1"), 1000));
+        }).then((err) => {
+          console.log("submitting process " + processid + " to colony " + colonyid)
           let spec = {
             "timeout": -1,
             "maxretries": 3,
