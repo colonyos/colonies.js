@@ -1,0 +1,90 @@
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <script src="../src/jquery-3.6.0.min.js"></script>
+  <script src="../src/crypto/wasm_exec.js"></script>
+  <script src="../src/crypto/crypto.js"></script>
+  <script src="../src/colonyruntime.js"></script>
+
+</head>
+<body>
+  <script>
+    $(function() {
+      let server_prvkey = "09545df1812e252a2a853cca29d7eace4a3fe2baad334e3b7141a98d43c31e7b"
+      let runtime = new ColonyRuntime()
+      let colonyid = ""
+      let colony_prvkey = ""
+      let runtime_prvkey = ""
+      let processid = ""
+      
+      runtime.load()
+      .then(() => {
+        console.log("done loading colonyruntime lib")
+        return runtime.list_colonies(server_prvkey)
+      }).then((colonies, err) => {
+        console.log("listening all colonies")
+        //console.log(colonies)
+      }).then(() => {
+        colony_prvkey = runtime.crypto.prvkey()
+        colonyid = runtime.crypto.id(colony_prvkey)
+        console.log("register new colony with id " + colonyid)
+
+        let colony = {
+          "colonyid": colonyid,
+          "name": "test_colony_name"
+        }
+        
+        return runtime.add_colony(colony, server_prvkey)
+      }).then((added_colony, err) => {
+          runtime_prvkey = runtime.crypto.prvkey()
+          runtimeid = runtime.crypto.id(runtime_prvkey)
+          new_runtime = {
+            "runtimeid": runtimeid,
+            "runtimetype": "test_runtime_type",
+            "name": "test_runtime_name",
+            "colonyid": colonyid,
+            "cpu": "AMD Ryzen 9 5950X (32) @ 3.400GHz",
+            "cores": 32,
+            "mem": 80326,
+            "gpu": "NVIDIA GeForce RTX 2080 Ti Rev. A",
+            "gpus": 1,
+            "state": 0
+          }   
+          console.log("register new runtime with id " + runtimeid)
+          
+          return runtime.add_runtime(new_runtime, colony_prvkey)
+        }).then((added_runtime, err) => {
+          console.log("approving runtime with id " + runtimeid)
+          return runtime.approve_runtime(new_runtime.runtimeid, colony_prvkey)
+        }).then((err) => {
+          console.log("submitting process " + processid + " to colony" + colonyid)
+          let spec = {
+            "timeout": -1,
+            "maxretries": 3,
+            "conditions": {
+              "colonyid": colonyid,
+              "runtimeids": [],
+              "runtimetype": "test_runtime_type",
+              "mem": 1000,
+              "cores": 10,
+              "gpus": 1
+            },
+            "env": {
+              "test_key_1": "test_value_1"
+            }
+          }
+    
+          return runtime.submit_process_spec(spec, runtime_prvkey)
+        }).then((added_process, err) => {
+          processid = added_process.processid
+          console.log("assigning process " + processid + " to runtime "+ runtimeid)
+          return runtime.assign(colonyid, runtime_prvkey)
+        }).then((process, err) => {
+          console.log("closing process " + processid)
+          return runtime.close_process(processid, true, runtime_prvkey)
+        })
+    });
+  </script>
+</body>
+</html>

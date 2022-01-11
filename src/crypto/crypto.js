@@ -5,13 +5,13 @@ class Crypto {
 
   load() {
     var go = this.go
-    let myPromise = new Promise(function(myResolve, myReject) {
+    let promise = new Promise(function(ok, err) {
       WebAssembly.instantiateStreaming(fetch("/src/crypto/cryptolib.wasm"), go.importObject).then((result) => {
         go.run(result.instance);
-        myResolve()
+        ok()
       })
     })
-    return myPromise
+    return promise
   }
 
   prvkey() {
