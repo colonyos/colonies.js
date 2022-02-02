@@ -12,11 +12,11 @@
   <img id="lamp" src="./lamp_off.png">
   <script>
     $(function() {
-      let colonyid = "2c3f333868f75991fec158823b115609107415c85ba21dc7ed35037573170358"
-      let runtimeid = "901da7c2d0af419b5c86b009c560d99db6509d08e4a982e50833b20bb96c5507"
-      let runtime_prvkey = "525873b0cf5373c6e53a36abb6fe54ec5621689e73b4c1fb97206d802f5d18d9"
+      let colonyid = "bdebcd2a6069cab6d1cee1e081780e02ec16d9e9f15bbb84906731a5ca541592"
+      let runtimeid = "6af2c7593d2760b6c81f145828158dae2a9648cbb29061d95fe54f55f69c2e24"
+      let runtime_prvkey = "3e0868011b52c55457df9bbccd37ce8fb99ad88318094243123e462aa341bd51"
       let runtime = new ColonyRuntime()
-
+// ci"
       runtime.load()
       .then(() => {
         runtime.subscribe_processes("lamp", 0, runtime_prvkey, function(processes) {

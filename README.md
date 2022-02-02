@@ -9,6 +9,10 @@ To turn a lamp on and off.
 2. Access to two Colony Runtimes registered to the Colony in Step 1, i.e. two Runtime Ids and corresponding public keys. One runtime is used by the Lamp and the other for the CLI.
 
 ## Lamp Web app
+Below is some example code how to turn on/off lamp on a web page using Colonies.
+
+![Lamp example](docs/images/lamp.png?raw=true "Lamp example")
+
 ```javascript
 <html>
 <head>
