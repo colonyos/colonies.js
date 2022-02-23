@@ -1,15 +1,10 @@
 {
     "conditions": {
-        "colonyid": "bdebcd2a6069cab6d1cee1e081780e02ec16d9e9f15bbb84906731a5ca541592",
-        "runtimeids": ["6af2c7593d2760b6c81f145828158dae2a9648cbb29061d95fe54f55f69c2e24"],
-        "runtimetype": "lamp",
-        "mem": 1000,
-        "cores": 10,
-        "gpus": 1
+        "colonyid": "2c50e2962040a934d844f8c4015e0e2a219c679236794fa85435d4ec8edd0838",
+        "runtimeids": ["4c795fd50993abd7d88c2520ae09a61ceb64ccbe6bca9c512ee706071f56c342"],
+        "runtimetype": "lamp"
     },
     "env": {
         "lamp_state": "on"
-    },
-    "timeout": -1,
-    "maxretries": 3
+    }
 }

@@ -1,6 +1,8 @@
 class ColonyRuntime {
-  constructor() {
+  constructor(host, port) {
     this.crypto = new Crypto()
+    this.host = host
+    this.port = port
   }
 
   load() {
@@ -26,11 +28,14 @@ class ColonyRuntime {
     
     rpcMsg.payload = btoa(JSON.stringify(msg))
     rpcMsg.signature = this.crypto.sign(rpcMsg.payload, prvkey)
-    
+   
+    var host = this.host
+    var port = this.port
+
     let promise = new Promise(function(ok, err) {
       $.ajax({
         type: "POST",
-        url: "https://localhost:8080/api",
+        url: "https://" + host + ":" + port + "/api",
         data: JSON.stringify(rpcMsg), 
         contentType: 'plain/text', 
         success: function(response) {
@@ -147,7 +152,7 @@ class ColonyRuntime {
     rpcMsg.payload = btoa(JSON.stringify(msg))
     rpcMsg.signature = this.crypto.sign(rpcMsg.payload, prvkey)
 
-    const socket = new WebSocket('wss://localhost:8080/pubsub');
+    const socket = new WebSocket("wss://" + this.host + ":" + this.port + "/pubsub");
     socket.addEventListener('open', function (event) {
       socket.send(JSON.stringify(rpcMsg));
     });
