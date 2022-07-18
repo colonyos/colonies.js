@@ -1,0 +1,12 @@
+{
+    "conditions": {
+        "colonyid": "4787a5071856a4acf702b2ffcea422e3237a679c681314113d86139461290cf4",
+        "runtimeids": [
+            "3fc05cf3df4b494e95d6a3d297a34f19938f7daa7422ab0d4f794454133341ac"
+        ],
+        "runtimetype": "cli"
+    },
+    "env": {
+        "lamp_state": "on"
+    }
+}
