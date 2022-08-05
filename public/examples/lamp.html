@@ -17,27 +17,43 @@
       let runtime_prvkey = "ddf7f7791208083b6a9ed975a72684f6406a269cfa36f1b1c32045c0a71fff05"
       let runtime = new ColonyRuntime("rocinante", "50080")
       
-      function sync_state() {
-        runtime.assign_latest(colonyid, runtime_prvkey).then((process, err) => {
-          lamp_state = process.attributes[0].value
-          if (lamp_state == "on") {
-            $("#lamp").attr("src","./lamp_on.png");
-          }
-          if (lamp_state == "off") {
-            $("#lamp").attr("src","./lamp_off.png");
-          }
-
-          runtime.close_process(process.processid, true, runtime_prvkey)
-        }) 
+      function assign() {
+          runtime.assignLatest(colonyid, runtime_prvkey)
+          .then((process) => {
+              console.log(process)
+              if (process.spec.func == "setLampState") {
+                  if (process.spec.args[0] == "on") {
+                      $("#lamp").attr("src","./lamp_on.png");
+                  }
+                  if (process.spec.args[0] == "off") {
+                      $("#lamp").attr("src","./lamp_off.png");
+                  }
+                  runtime.closeProcess(process.processid, true, runtime_prvkey)
+              }
+          })
+          .catch((err) => {
+              console.log("error")
+              console.log(err) 
+          })
       } 
+    
+      function subscribe() {
+          runtime.subscribeProcesses("cli", 30, 0, runtime_prvkey, (process) => { // re-subscribe every 30 seconds
+             assign()        
+          })
+          .catch(() => {
+               setTimeout(() => {
+                   assign()
+                   subscribe()
+               },2000);
+          })
+      }
 
       runtime.load().then(() => {
-        sync_state()
-        runtime.subscribe_processes("cli", 0, runtime_prvkey, function(processes) {
-           sync_state()
-        })
-      });
-    });
+          assign()
+          subscribe()
+      })
+    })
   </script>
 </body>
 </html>

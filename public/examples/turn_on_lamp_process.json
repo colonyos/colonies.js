@@ -6,7 +6,9 @@
         ],
         "runtimetype": "cli"
     },
-    "env": {
-        "lamp_state": "on"
-    }
+    "func": "setLampState",
+    "args": [
+        "on"
+    ],
+    "maxwaittime": 5
 }
