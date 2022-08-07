@@ -146,6 +146,8 @@ class ColonyRuntime {
     }
 
     addAttribute(attribute, prvkey) {
+        attribute.attributetype = output
+
         var msg = {
             "msgtype": "addattributemsg",
             "attribute": attribute

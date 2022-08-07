@@ -141,6 +141,5 @@ source devenv
 Alternatively, it possible to submit processes without JSON using the Colonies CLI.
 
 ```console
-colonies process run --func setLampState --args on --maxwaittime 10 --targetid 3fc05cf3df4b494e95d6a3d297a34f19938f7daa7422ab0d4f794454133341ac --ta
-rgettype cli
+colonies process run --func setLampState --args on --maxwaittime 10 --targetid 3fc05cf3df4b494e95d6a3d297a34f19938f7daa7422ab0d4f794454133341ac --targettype cli
 ```
