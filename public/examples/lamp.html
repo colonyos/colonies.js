@@ -20,7 +20,6 @@
       function assign() {
           runtime.assignLatest(colonyid, runtime_prvkey)
           .then((process) => {
-              console.log(process)
               if (process.spec.func == "setLampState") {
                   if (process.spec.args[0] == "on") {
                       $("#lamp").attr("src","./lamp_on.png");
@@ -32,7 +31,6 @@
               }
           })
           .catch((err) => {
-              console.log("error")
               console.log(err) 
           })
       } 

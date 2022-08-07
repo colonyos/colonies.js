@@ -1,3 +1,8 @@
+const input = 0
+const output = 1
+const err = 2
+const env = 3
+
 class ColonyRuntime {
     constructor(host, port) {
         this.crypto = new Crypto()
@@ -140,6 +145,14 @@ class ColonyRuntime {
         return this.sendRPCMsg(msg, prvkey)
     }
 
+    addAttribute(attribute, prvkey) {
+        var msg = {
+            "msgtype": "addattributemsg",
+            "attribute": attribute
+        }
+
+        return this.sendRPCMsg(msg, prvkey)
+    }
 
     closeProcess(processid, successful, prvkey) {
         var msg = {
