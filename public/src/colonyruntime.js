@@ -2,6 +2,10 @@ const input = 0
 const output = 1
 const err = 2
 const env = 3
+const Waiting = 0;
+const Running = 1;
+const Success = 2;
+const Failed = 3;
 
 class ColonyRuntime {
     constructor(host, port) {
@@ -38,26 +42,29 @@ class ColonyRuntime {
         var port = this.port
 
         let promise = new Promise(function(resolve, reject) {
-            $.ajax({
-                type: "POST",
-                url: "http://" + host + ":" + port + "/api",
-                data: JSON.stringify(rpcMsg),
-                contentType: 'plain/text',
-                success: function(response) {
-                    let rpcReplyMsg = JSON.parse(response)
-                    let msg = JSON.parse(atob(JSON.parse(response).payload))
-                    if (rpcReplyMsg.error == true) {
-                        reject(msg)
-                    } else {
-                        resolve(msg)
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: "http://" + host + ":" + port + "/api",
+                    data: JSON.stringify(rpcMsg),
+                    contentType: 'plain/text',
+                    success: function(response) {
+                        let rpcReplyMsg = JSON.parse(response)
+                        let msg = JSON.parse(atob(JSON.parse(response).payload))
+                        if (rpcReplyMsg.error == true) {
+                            reject(msg)
+                        } else {
+                            resolve(msg)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        reject(error)
                     }
-                },
-                fail: function(xhr, status, error) {
-                    reject(atob(JSON.parse(response).payload))
-                }
-            })
+                })
+            } catch (e) {
+                reject(e)
+            }
         })
-
         return promise
     }
 
@@ -114,7 +121,7 @@ class ColonyRuntime {
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    submitProcess_spec(spec, prvkey) {
+    submitProcessSpec(spec, prvkey) {
         var msg = {
             "msgtype": "submitprocessespecmsg",
             "spec": spec
@@ -123,22 +130,43 @@ class ColonyRuntime {
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    assign(colonyid, prvkey) {
+    getProcess(processId, prvkey) {
+        var msg = {
+            "msgtype": "getprocessmsg",
+            "processid": processId
+        }
+
+        return this.sendRPCMsg(msg, prvkey)
+    }
+
+
+    getProcesses(colonyId, count, state, prvkey) {
+        var msg = {
+            "msgtype": "getprocessesmsg",
+            "colonyid": colonyId,
+            "count": count,
+            "state": state
+        }
+
+        return this.sendRPCMsg(msg, prvkey)
+    }
+
+    assign(colonyid, timeout, prvkey) {
         var msg = {
             "msgtype": "assignprocessmsg",
             "latest": false,
-            "timeout": 1,
+            "timeout": timeout,
             "colonyid": colonyid
         }
 
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    assignLatest(colonyid, prvkey) {
+    assignLatest(colonyid, timeout, prvkey) {
         var msg = {
             "msgtype": "assignprocessmsg",
             "latest": true,
-            "timeout": -1,
+            "timeout": timeout,
             "colonyid": colonyid
         }
 
@@ -166,7 +194,7 @@ class ColonyRuntime {
             return this.sendRPCMsg(msg, prvkey)
         }
 
-        msg.msgtype = "closefailedfulmsg"
+        msg.msgtype = "closefailedmsg"
         return this.sendRPCMsg(msg, prvkey)
     }
 
