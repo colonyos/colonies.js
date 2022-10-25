@@ -1,58 +1,61 @@
 <html>
-<head>
-  <meta charset="utf-8">
 
-  <script src="../src/jquery-3.6.0.min.js"></script>
-  <script src="../src/crypto/wasm_exec.js"></script>
-  <script src="../src/crypto/crypto.js"></script>
-  <script src="../src/colonyruntime.js"></script>
+<head>
+    <meta charset="utf-8">
+
+    <script src="../src/jquery-3.6.0.min.js"></script>
+    <script src="../src/crypto/wasm_exec.js"></script>
+    <script src="../src/crypto/crypto.js"></script>
+    <script src="../src/colonyruntime.js"></script>
 
 </head>
-<body>
-  <img id="lamp" src="./lamp_off.png">
-  <script>
-    $(function() {
-      let colonyid = "4787a5071856a4acf702b2ffcea422e3237a679c681314113d86139461290cf4"
-      let runtimeid = "3fc05cf3df4b494e95d6a3d297a34f19938f7daa7422ab0d4f794454133341ac"
-      let runtime_prvkey = "ddf7f7791208083b6a9ed975a72684f6406a269cfa36f1b1c32045c0a71fff05"
-      let runtime = new ColonyRuntime("rocinante", "50080")
-      
-      function assign() {
-          runtime.assignLatest(colonyid, runtime_prvkey)
-          .then((process) => {
-              if (process.spec.func == "setLampState") {
-                  if (process.spec.args[0] == "on") {
-                      $("#lamp").attr("src","./lamp_on.png");
-                  }
-                  if (process.spec.args[0] == "off") {
-                      $("#lamp").attr("src","./lamp_off.png");
-                  }
-                  
-                  runtime.closeProcess(process.processid, true, runtime_prvkey)
-              }
-          })
-          .catch((err) => {
-              console.log(err) 
-          })
-      } 
-    
-      function subscribe() {
-          runtime.subscribeProcesses("cli", 30, 0, runtime_prvkey, (process) => { // re-subscribe every 30 seconds
-             assign()        
-          })
-          .catch(() => {
-               setTimeout(() => {
-                   assign()
-                   subscribe()
-               },2000);
-          })
-      }
 
-      runtime.load().then(() => {
-          assign()
-          subscribe()
-      })
-    })
-  </script>
+<body>
+    <img id="lamp" src="./lamp_off.png">
+    <script>
+        $(function () {
+            let colonyid = "4787a5071856a4acf702b2ffcea422e3237a679c681314113d86139461290cf4"
+            let runtimeid = "a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5"
+            let runtime_prvkey = "d7211c4bba702cfa1326d4982686f5daef2a2a1905dbe01584666f3577f15711"
+            let runtime = new ColonyRuntime("localhost", "50080")
+
+            function assign() {
+                runtime.assignLatest(colonyid, -1, runtime_prvkey)
+                    .then((process) => {
+                        if (process.spec.func == "setLampState") {
+                            if (process.spec.args[0] == "on") {
+                                $("#lamp").attr("src", "./lamp_on.png");
+                            }
+                            if (process.spec.args[0] == "off") {
+                                $("#lamp").attr("src", "./lamp_off.png");
+                            }
+
+                            runtime.closeProcess(process.processid, true, runtime_prvkey)
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            }
+
+            function subscribe() {
+                runtime.subscribeProcesses("lamp", 30, 0, runtime_prvkey, (process) => { // re-subscribe every 30 seconds
+                    assign()
+                })
+                    .catch(() => {
+                        setTimeout(() => {
+                            assign()
+                            subscribe()
+                        }, 2000);
+                    })
+            }
+
+            runtime.load().then(() => {
+                assign()
+                subscribe()
+            })
+        })
+    </script>
 </body>
+
 </html>

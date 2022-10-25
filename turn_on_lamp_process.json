@@ -2,9 +2,9 @@
     "conditions": {
         "colonyid": "4787a5071856a4acf702b2ffcea422e3237a679c681314113d86139461290cf4",
         "runtimeids": [
-            "3fc05cf3df4b494e95d6a3d297a34f19938f7daa7422ab0d4f794454133341ac"
+            "a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5"
         ],
-        "runtimetype": "cli"
+        "runtimetype": "lamp"
     },
     "func": "setLampState",
     "args": [
