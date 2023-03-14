@@ -6,7 +6,7 @@
     <script src="../src/jquery-3.6.0.min.js"></script>
     <script src="../src/crypto/wasm_exec.js"></script>
     <script src="../src/crypto/crypto.js"></script>
-    <script src="../src/colonyruntime.js"></script>
+    <script src="../src/colonies.js"></script>
 
 </head>
 
@@ -14,23 +14,29 @@
     <img id="lamp" src="./lamp_off.png">
     <script>
         $(function () {
-            let colonyid = "4787a5071856a4acf702b2ffcea422e3237a679c681314113d86139461290cf4"
-            let runtimeid = "a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5"
-            let runtime_prvkey = "d7211c4bba702cfa1326d4982686f5daef2a2a1905dbe01584666f3577f15711"
-            let runtime = new ColonyRuntime("localhost", "50080")
+            let colonyId = "4787a5071856a4acf702b2ffcea422e3237a679c681314113d86139461290cf4"
+            let executorId = "a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5"
+            let executorPrvKey = "d7211c4bba702cfa1326d4982686f5daef2a2a1905dbe01584666f3577f15711"
+            let colonies = new Colonies("rocinante", "50080")
 
             function assign() {
-                runtime.assignLatest(colonyid, -1, runtime_prvkey)
+                colonies.assignLatest(colonyId, -1, executorPrvKey)
                     .then((process) => {
-                        if (process.spec.func == "setLampState") {
-                            if (process.spec.args[0] == "on") {
+                        console.log(process)
+                        let args = process.spec.args
+                        if (process.in.length > 0) {
+                            args = process.in
+                        }
+
+                        if (process.spec.funcname == "set_lamp_state") {
+                            if (args[0] == "on") {
                                 $("#lamp").attr("src", "./lamp_on.png");
                             }
-                            if (process.spec.args[0] == "off") {
+                            if (args[0] == "off") {
                                 $("#lamp").attr("src", "./lamp_off.png");
                             }
 
-                            runtime.closeProcess(process.processid, true, runtime_prvkey)
+                            colonies.close(process.processid, executorPrvKey)
                         }
                     })
                     .catch((err) => {
@@ -39,7 +45,7 @@
             }
 
             function subscribe() {
-                runtime.subscribeProcesses("lamp", 30, 0, runtime_prvkey, (process) => { // re-subscribe every 30 seconds
+                colonies.subscribeProcesses("lamp_executor", 30, 0, executorPrvKey, (process) => { // re-subscribe every 30 seconds
                     assign()
                 })
                     .catch(() => {
@@ -50,7 +56,7 @@
                     })
             }
 
-            runtime.load().then(() => {
+            colonies.load().then(() => {
                 assign()
                 subscribe()
             })

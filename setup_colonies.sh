@@ -3,5 +3,5 @@
 #Generated new private key and stored in keychain  ID=a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5 privateKey=d7211c4bba702cfa1326d4982686f5daef2a2a1905dbe01584666f3577f15711
 # Register a drone
 colonies keychain add --id a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5 --prvkey d7211c4bba702cfa1326d4982686f5daef2a2a1905dbe01584666f3577f15711
-colonies runtime register --spec ./lamp_runtime.json --runtimeprvkey d7211c4bba702cfa1326d4982686f5daef2a2a1905dbe01584666f3577f15711
-colonies runtime approve --runtimeid a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5
+colonies executor add --spec ./lamp_executor.json --executorprvkey d7211c4bba702cfa1326d4982686f5daef2a2a1905dbe01584666f3577f15711
+colonies executor approve --executorid a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5

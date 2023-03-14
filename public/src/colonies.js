@@ -7,7 +7,7 @@ const Running = 1;
 const Success = 2;
 const Failed = 3;
 
-class ColonyRuntime {
+class Colonies {
     constructor(host, port) {
         this.crypto = new Crypto()
         this.host = host
@@ -68,7 +68,7 @@ class ColonyRuntime {
         return promise
     }
 
-    add_colony(colony, prvkey) {
+    addColony(colony, prvkey) {
         var msg = {
             "msgtype": "addcolonymsg",
             "colony": colony
@@ -85,45 +85,45 @@ class ColonyRuntime {
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    getColony(colonyid, prvkey) {
+    getColony(colonyID, prvkey) {
         var msg = {
             "msgtype": "getcolonymsg",
-            "colonyid": colonyid
+            "colonyid": colonyId
         }
 
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    addRuntime(runtime, prvkey) {
+    addExecutor(executor, prvkey) {
         var msg = {
-            "msgtype": "addruntimemsg",
-            "runtime": runtime
+            "msgtype": "addexecutormsg",
+            "executor": executor
         }
 
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    rejectRuntime(runtimeid, prvkey) {
+    rejectExecutor(executorId, prvkey) {
         var msg = {
-            "msgtype": "rejectruntimemsg",
-            "runtimeid": runtimeid
+            "msgtype": "rejectexecutormsg",
+            "executorid": executorId
         }
 
         return this.sendRPMsg(msg, prvkey)
     }
 
-    approveRuntime(runtimeid, prvkey) {
+    approveExecutor(executorId, prvkey) {
         var msg = {
-            "msgtype": "approveruntimemsg",
-            "runtimeid": runtimeid
+            "msgtype": "approveexecutormsg",
+            "executorid": executorId
         }
 
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    submitProcessSpec(spec, prvkey) {
+    submit(spec, prvkey) {
         var msg = {
-            "msgtype": "submitprocessespecmsg",
+            "msgtype": "submitfuncspecmsg",
             "spec": spec
         }
 
@@ -151,23 +151,23 @@ class ColonyRuntime {
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    assign(colonyid, timeout, prvkey) {
+    assign(colonyId, timeout, prvkey) {
         var msg = {
             "msgtype": "assignprocessmsg",
             "latest": false,
             "timeout": timeout,
-            "colonyid": colonyid
+            "colonyid": colonyId
         }
 
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    assignLatest(colonyid, timeout, prvkey) {
+    assignLatest(colonyId, timeout, prvkey) {
         var msg = {
             "msgtype": "assignprocessmsg",
             "latest": true,
             "timeout": timeout,
-            "colonyid": colonyid
+            "colonyid": colonyId
         }
 
         return this.sendRPCMsg(msg, prvkey)
@@ -184,24 +184,29 @@ class ColonyRuntime {
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    closeProcess(processid, successful, prvkey) {
+    close(processId, prvkey) {
         var msg = {
             "msgtype": "closesuccessfulmsg",
-            "processid": processid
+            "processid": processId
         }
 
-        if (successful) {
-            return this.sendRPCMsg(msg, prvkey)
-        }
-
-        msg.msgtype = "closefailedmsg"
         return this.sendRPCMsg(msg, prvkey)
     }
 
-    subscribeProcesses(runtimetype, timeout, state, prvkey, callback) {
+    fail(processId, prvkey) {
+        var msg = {
+            "msgtype": "closefailedmsg",
+            "processid": processId
+        }
+
+        return this.sendRPCMsg(msg, prvkey)
+    }
+
+
+    subscribeProcesses(executorType, timeout, state, prvkey, callback) {
         var msg = {
             "msgtype": "subscribeprocessesmsg",
-            "runtimetype": runtimetype,
+            "executortype": executorType,
             "state": state,
             "timeout": timeout
         }

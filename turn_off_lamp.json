@@ -1,12 +1,9 @@
 {
     "conditions": {
         "colonyid": "4787a5071856a4acf702b2ffcea422e3237a679c681314113d86139461290cf4",
-        "runtimeids": [
-            "a1e83c65bad935febfd19162532b7476328568461dd700560321d099f204f8c5"
-        ],
-        "runtimetype": "lamp"
+        "executortype": "lamp_executor"
     },
-    "func": "setLampState",
+    "funcname": "set_lamp_state",
     "args": [
         "off"
     ],
