@@ -1,4 +1,26 @@
 {
-    "executorname": "lamp",
-    "executortype": "lamp_executor"
+    "executorname": "lamp-executor",
+    "executortype": "lamp-executor",
+    "location": {
+        "long": 65.61790601146973,
+        "lat": 22.1278687806971,
+        "desc": "RISE Luleå Science Park"
+    },
+    "capabilities": {
+        "hardware": {
+            "model": "Apple Macbook Pro",
+            "cpu": "8000m",
+            "mem": "32Gi",
+            "storage": "1Ti",
+            "gpu": {
+                "name": "",
+                "count": 0
+            }
+        },
+        "software": {
+            "name": "colonies.jl lamp example",
+            "type": "webserver",
+            "version": "latest"
+        }
+    }
 }
